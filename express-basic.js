@@ -48,17 +48,19 @@ app.get("/api/diaries/:id", (req, res) => {
 });
 
 app.post("/api/diaries", (req, res) => {
-  const schema = {
-    content: Joi.string().min(3).required(),
-  };
+  /**
+   * const schema = {
+   *   content: Joi.string().min(3).required(),
+   * };
 
-  const result = Joi.validate(req.body, schema);
-  // console.log(result);
+   * const result = Joi.validate(req.body, schema);
 
-  if (result.error) {
-    res.status("400").send(result.error.details[0].message);
-    return;
-  }
+   * if (result.error) {
+   *   res.status("400").send(result.error.details[0].message);
+   *   return;
+   * }
+   */
+
   // Joi用法: https://www.npmjs.com/package/joi
 
   /**
@@ -71,6 +73,11 @@ app.post("/api/diaries", (req, res) => {
    *  }
    */
 
+  const { error } = validateDiary(res.body);
+  if (error) {
+    res.status("400").send(error.details[0].message);
+  }
+
   const diary = {
     id: diaries.length + 1,
     name: req.body.content,
@@ -79,6 +86,29 @@ app.post("/api/diaries", (req, res) => {
   diaries.push(diary);
   res.send(diary);
 });
+
+app.put("/api/diaries/:id", (req, res) => {
+  const diary = diaries.find((c) => c.id === parseInt(req.params.id));
+  if (!diary)
+    res.status("400").send("The diary with the given id was not found.");
+
+  const { error } = validateDiary(res.body);
+  if (error) {
+    res.status("400").send(error.details[0].message);
+  }
+
+  // update diary
+  diary.content = req.body.content;
+  res.send(diary);
+});
+
+function validateDiary(course) {
+  const schema = {
+    content: Joi.string().min(3).required(),
+  };
+
+  return Joi.validate(course, schema);
+}
 
 // HARD-CODE => app.listen(3100, () => { ...
 const port = process.env.PORT || 3100;
