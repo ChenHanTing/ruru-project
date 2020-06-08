@@ -75,7 +75,7 @@ app.post("/api/diaries", (req, res) => {
 
   const { error } = validateDiary(res.body);
   if (error) {
-    res.status("400").send(error.details[0].message);
+    return res.status("400").send(error.details[0].message);
   }
 
   const diary = {
@@ -90,11 +90,11 @@ app.post("/api/diaries", (req, res) => {
 app.put("/api/diaries/:id", (req, res) => {
   const diary = diaries.find((c) => c.id === parseInt(req.params.id));
   if (!diary)
-    res.status("400").send("The diary with the given id was not found.");
+    return res.status("400").send("The diary with the given id was not found.");
 
   const { error } = validateDiary(res.body);
   if (error) {
-    res.status("400").send(error.details[0].message);
+    return res.status("400").send(error.details[0].message);
   }
 
   // update diary
@@ -107,7 +107,7 @@ app.delete("/api/diaries/:id", (req, res) => {
   // Not Existing, return 404
   const diary = diaries.find((c) => c.id === parseInt(req.params.id));
   if (!diary)
-    res.status("400").send("The diary with the given id was not found.");
+    return res.status("400").send("The diary with the given id was not found.");
 
   // Delete
 
