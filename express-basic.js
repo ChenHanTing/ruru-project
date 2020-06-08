@@ -102,6 +102,28 @@ app.put("/api/diaries/:id", (req, res) => {
   res.send(diary);
 });
 
+app.delete("/api/diaries/:id", (req, res) => {
+  // Look up the diary
+  // Not Existing, return 404
+  const diary = diaries.find((c) => c.id === parseInt(req.params.id));
+  if (!diary)
+    res.status("400").send("The diary with the given id was not found.");
+
+  // Delete
+
+  /**
+   * const beasts = ['ant', 'bison', 'camel', 'duck', 'bison'];
+   * console.log(beasts.indexOf('bison'));
+   * expected output: 1
+   */
+
+  const index = diaries.indexOf(diary);
+  diaries.splice(index, 1);
+
+  // return the same diary
+  res.send(diary);
+});
+
 function validateDiary(course) {
   const schema = {
     content: Joi.string().min(3).required(),
