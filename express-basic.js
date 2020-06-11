@@ -1,4 +1,7 @@
+const helmet = require("helmet");
+const morgan = require("morgan");
 const express = require("express");
+const logger = require("./logging");
 const app = express();
 
 // const Joi = require("@hapi/joi");
@@ -6,6 +9,17 @@ const Joi = require("joi");
 
 // use the middleware to access the popeline
 app.use(express.json());
+app.use(express.urlencoded()); // key1=val1&key2=val2
+app.use(helmet());
+app.use(morgan("tiny"));
+
+// middling function
+app.use(logger);
+
+app.use(function (req, res, next) {
+  console.log("Authenticating...");
+  next(); // 將這行註解將會卡住
+});
 
 const diaries = [
   { id: 1, content: "Hello01" },
@@ -13,6 +27,7 @@ const diaries = [
   { id: 3, content: "Hello03" },
 ];
 
+// 裡面的callback function 是一種 middleware function
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
