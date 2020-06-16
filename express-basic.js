@@ -1,3 +1,7 @@
+/** 實際上startUpDebugger, dbDebugger不會同時存在 */
+const startUpDebugger = require('debug')('app:startup');
+const dbDebugger = require('debug')('app:db');
+const config = require("config");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const express = require("express");
@@ -9,12 +13,66 @@ const Joi = require("joi");
 
 // use the middleware to access the popeline
 app.use(express.json());
-app.use(express.urlencoded()); // key1=val1&key2=val2
+app.use(express.urlencoded()); // key1=val1&key2=val2 w-www-form-urlencoded
+app.use(express.static('public'))
+
 app.use(helmet());
-app.use(morgan("tiny"));
+// app.use(morgan("tiny")); => 移到 app.get('env') === 'development' 執行
+// in conosle: GET /static/readme.txt 404 156 - 0.571 ms
 
 // middling function
 app.use(logger);
+
+// environment
+console.log(`NODE_ENV: ${process.env.NODE_ENV}`)
+console.log(`app: ${app.get('env')}`)
+
+if (app.get('env') === 'development') {
+  app.use(morgan('tiny'));
+  console.log('Morgan enabled...');
+  // export DEBUG=app:startup
+  startUpDebugger('startUpDebugger: Morgan enabled...');
+  // debug('Morgan enabled...');
+}
+// export NODE_ENV=production
+// 就不會執行 console.log('Morgan enabled...');
+
+// DB work
+// export DEBUG=app:db
+dbDebugger('Connected to the database...')
+
+/**
+ * export DEBUG=app:db,app:startup
+ * export DEBUG=app:*
+ * 
+ * DEBUG=app:* nodemon express-basic.js 
+ */
+
+
+/**
+ * Configuration
+ * 
+ * 環境變數相關套件
+ * npm: rc
+ * npm: config
+ * mosh 推薦使用人數比較少的 config
+ * npm i config
+ * 
+ * export NODE_ENV=development
+ */
+
+console.log('Application Name: ' + config.get('name'));
+console.log('Mail Server: ' + config.get('mail.host'));
+
+/**
+ * export app_password=1234
+ * custom-environment-variables.json （檔名不能拼錯）
+ */
+console.log('Mail Password: ' + config.get('mail.password'));
+
+/**
+ * debug: npm i debug
+ */
 
 app.use(function (req, res, next) {
   console.log("Authenticating...");
