@@ -11,10 +11,14 @@ const app = express();
 // const Joi = require("@hapi/joi");
 const Joi = require("joi");
 
-// use the middleware to access the popeline
+// use the middleware to access the pipeline
 app.use(express.json());
 app.use(express.urlencoded()); // key1=val1&key2=val2 w-www-form-urlencoded
-app.use(express.static('public'))
+app.use(express.static('public')) 
+/** 
+ * 有關於靜態網頁的使用請參照: 
+ * https://expressjs.com/zh-tw/starter/static-files.html
+ */
 
 app.use(helmet());
 // app.use(morgan("tiny")); => 移到 app.get('env') === 'development' 執行
