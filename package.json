@@ -13,11 +13,16 @@
     "config": "^3.3.1",
     "debug": "^4.1.1",
     "express": "^4.17.1",
+    "fs": "0.0.1-security",
     "helmet": "^3.22.0",
     "joi": "^14.3.1",
     "mongoose": "^5.9.19",
     "morgan": "^1.10.0",
+    "node-cron": "^2.0.3",
+    "nodemailer": "^6.4.10",
     "ramda": "^0.27.0",
+    "shelljs": "^0.8.4",
+    "sqlite3": "^4.2.0",
     "swiper": "^5.4.5",
     "underscore": "^1.10.2"
   }
