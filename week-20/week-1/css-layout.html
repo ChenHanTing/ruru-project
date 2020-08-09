@@ -1,0 +1,106 @@
+<!-- 快捷鍵 !+tab -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .grid-basic {
+        display: grid;
+        margin-bottom: 20px;
+        grid-template-columns: 3rem 25% 1fr 2fr;
+      }
+
+      .grid-wrapper {
+        display: grid;
+        grid-column-gap: 4px;
+        grid-row-gap: 4px;
+      }
+
+      .grid-wrapper .header {
+        background-color: antiquewhite;
+        text-align: center;
+        /* grid-area: nav; */
+      }
+      .grid-wrapper .sidebar {
+        background-color: skyblue;
+        /* grid-area: sidebar; */
+      }
+      .grid-wrapper .content {
+        background-color: yellow;
+        /* grid-area: content; */
+      }
+      .grid-wrapper .aside {
+        background-color: pink;
+        /* grid-area: aside; */
+      }
+      .grid-wrapper .footer {
+        background-color: cadetblue;
+        /* grid-area: footer; */
+      }
+
+      @media (min-width: 576px) {
+        .grid-wrapper {
+          grid-template-columns: 200px 1fr 200px; /* 寬 */
+          grid-template-rows: 100px 400px 100px; /* 高 */
+        }
+
+        .grid-wrapper .header {
+          grid-column: 1 / -1;
+          grid-row: 1;
+        }
+
+        .grid-wrapper .footer {
+          /* row-start, column-start, row-end, column-end */
+          grid-area: 3 / 1 / -1 / -1;
+        }
+      }
+
+      @media (max-width: 577px) {
+        .grid-wrapper {
+          grid-template-columns: 1fr; /* 寬 */
+          grid-template-rows: 100px 400px 300px 300px 100px; /* 高 */
+          grid-template-areas:
+            "nav"
+            "sidebar"
+            "main-content"
+            "aside"
+            "footer";
+        }
+
+        .grid-wrapper .header {
+          grid-area: nav;
+        }
+        .grid-wrapper .sidebar {
+          grid-area: sidebar;
+        }
+        .grid-wrapper .content {
+          grid-area: main-content;
+        }
+        .grid-wrapper .aside {
+          grid-area: aside;
+        }
+        .grid-wrapper .footer {
+          grid-area: footer;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid-basic">
+      <div class="a">This is 'a' block</div>
+      <div class="b">This is 'b' block</div>
+      <div class="c">This is 'c' block</div>
+      <div class="d">This is 'd' block</div>
+    </div>
+    <div class="grid-wrapper">
+      <div class="header">Header (Not responsive)</div>
+      <div class="sidebar">Sidebar</div>
+      <div class="content">Main content</div>
+      <div class="aside">Aside</div>
+      <div class="footer">Footer</div>
+    </div>
+  </body>
+</html>
